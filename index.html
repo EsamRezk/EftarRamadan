@@ -418,15 +418,15 @@
   .leaderboard-table th {
     color: var(--gold);
     font-size: 0.85rem;
-    padding: 10px 12px;
+    padding: 8px 6px;
     border-bottom: 1px solid rgba(212,175,55,0.2);
     text-align: right;
   }
 
   .leaderboard-table td {
-    padding: 12px 12px;
+    padding: 10px 6px;
     border-bottom: 1px solid rgba(255,255,255,0.05);
-    font-size: 0.95rem;
+    font-size: 0.82rem;
     color: var(--text-light);
   }
 
@@ -434,7 +434,7 @@
 
   .rank-badge {
     display: inline-block;
-    width: 28px; height: 28px;
+    width: 24px; height: 24px;
     border-radius: 50%;
     text-align: center;
     line-height: 28px;
@@ -985,18 +985,19 @@ async function loadLeaderboard() {
           <th>#</th>
           <th>الاسم</th>
           <th>النتيجة</th>
-          <th>الوقت</th>
         </tr>
       </thead>
       <tbody>
         ${results.map((r, i) => `
-          <tr>
-            <td><span class="rank-badge ${rankClass(i)}">${i < 3 ? medals[i] : i+1}</span></td>
-            <td>${escHtml(r.name)}</td>
-            <td style="color:${r.score===3?'var(--gold)':r.score===2?'#2ECC71':'rgba(240,230,200,0.7)'}">${r.score} / ${r.total} ${'⭐'.repeat(r.score)}</td>
-            <td style="font-size:0.8rem; opacity:0.6;">${formatDate(r.created_at)}</td>
-          </tr>
-        `).join('')}
+  <tr>
+    <td><span class="rank-badge ${rankClass(i)}">${i < 3 ? medals[i] : i+1}</span></td>
+    <td>
+      <div style="font-size:0.95rem;">${escHtml(r.name)}</div>
+      <div style="font-size:0.75rem; opacity:0.5; margin-top:2px;">🕐 ${formatDate(r.created_at)}</div>
+    </td>
+    <td style="color:${r.score===10?'var(--gold)':r.score>=7?'#2ECC71':'rgba(240,230,200,0.7)'}; white-space:nowrap;">${r.score} / ${r.total}<br>${'⭐'.repeat(r.score)}</td>
+  </tr>
+`).join('')}
       </tbody>
     </table>
     ${!useDB ? '<p style="text-align:center; margin-top:16px; font-size:0.8rem; color:rgba(212,175,55,0.5);">⚠️ وضع المعاينة - البيانات محلية فقط</p>' : ''}
