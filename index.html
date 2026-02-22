@@ -639,12 +639,12 @@ const SUPABASE_URL = 'https://tnbyvzjrtmaetnhjzyvs.supabase.co';
 const SUPABASE_KEY = 'sb_secret_aAXRoFZuA8XrzH7OdKOgsw_MxpM2tIQ';
 // ============================================================
 
-let supabase = null;
+let sbClient = null;
 let useDB = false;
 
 try {
   if (SUPABASE_URL !== 'YOUR_SUPABASE_URL') {
-    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
     useDB = true;
   }
 } catch(e) {}
@@ -809,7 +809,7 @@ async function showResult() {
   // Save to DB
   if (useDB) {
     try {
-      await supabase.from('quiz_results').insert({
+      await sbClient.from('quiz_results').insert({
         name: userName,
         score: score,
         total: questions.length,
@@ -841,7 +841,7 @@ async function loadLeaderboard() {
 
   if (useDB) {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await sbClient
         .from('quiz_results')
         .select('*')
         .order('score', { ascending: false })
