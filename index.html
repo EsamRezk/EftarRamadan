@@ -545,6 +545,7 @@
       <div class="input-group">
         <label>✦ اكتب اسمك للبدء</label>
         <input type="text" id="nameInput" placeholder="اسمك الكريم..." maxlength="30" />
+        <div id="nameError" style="display:none; margin-top:10px; padding:12px 16px; background:rgba(231,76,60,0.15); border:1px solid rgba(231,76,60,0.4); border-radius:10px; color:#E74C3C; font-size:0.9rem; text-align:center;"></div>
       </div>
 
       <button class="btn" id="startBtn" onclick="startQuiz()">
@@ -753,20 +754,55 @@ function showScreen(id) {
   document.getElementById(id).classList.add('active');
 }
 
-function startQuiz() {
+async function startQuiz() {
   const name = document.getElementById('nameInput').value.trim();
+  const errorEl = document.getElementById('nameError');
+  const btn = document.getElementById('startBtn');
+
+  errorEl.style.display = 'none';
+  document.getElementById('nameInput').style.borderColor = '';
+
   if (!name) {
     document.getElementById('nameInput').style.borderColor = '#E74C3C';
-    document.getElementById('nameInput').placeholder = '⚠️ من فضلك اكتب اسمك';
+    errorEl.textContent = '⚠️ من فضلك اكتب اسمك الكريم';
+    errorEl.style.display = 'block';
     return;
   }
-  userName = name;
 
-  // Show leaderboard button only for admin on welcome screen
+  // Admin bypasses duplicate check
   const isAdmin = name === ADMIN_NAME;
+
+  if (!isAdmin && useDB) {
+    // Check if name already registered
+    btn.textContent = '⏳ جاري التحقق...';
+    btn.disabled = true;
+
+    try {
+      const { data } = await sbClient
+        .from('quiz_results')
+        .select('id')
+        .ilike('name', name)
+        .limit(1);
+
+      if (data && data.length > 0) {
+        errorEl.innerHTML = `⛔ الاسم <strong>"${escHtml(name)}"</strong> مسجّل مسبقاً<br><span style="font-size:0.85rem; opacity:0.8;">كل شخص يلعب مرة واحدة فقط 🌙</span>`;
+        errorEl.style.display = 'block';
+        document.getElementById('nameInput').style.borderColor = '#E74C3C';
+        btn.textContent = 'ابدأ المسابقة ✨';
+        btn.disabled = false;
+        return;
+      }
+    } catch(e) {
+      console.log('Check error:', e);
+    }
+
+    btn.textContent = 'ابدأ المسابقة ✨';
+    btn.disabled = false;
+  }
+
+  userName = name;
   document.getElementById('leaderboardBtnRow').style.display = isAdmin ? 'flex' : 'none';
 
-  // If admin just typed name and wants leaderboard directly - allow from welcome
   currentQ = 0;
   score = 0;
   answers = [];
