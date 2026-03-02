@@ -632,21 +632,7 @@ h1 {
     <h1 style="font-size:1.7rem;">🏆 نتايج العائلة</h1>
     <div class="gold-divider"></div>
     <div id="leaderboardContent" class="loading">جاري التحميل...</div>
-
-    <!-- أدوات الأدمن -->
-    <div id="adminToolsSection" style="display:none; margin-top:20px;">
-      <div style="border-top:1px solid rgba(212,175,55,0.2); padding-top:16px;">
-        <p style="text-align:center; color:var(--gold); font-size:0.85rem; font-weight:700; margin-bottom:12px; letter-spacing:1px;">
-          🔧 أدوات الأدمن — إعادة تعيين لاعب
-        </p>
-        <div id="adminPlayersList"></div>
-        <button onclick="clearAllPlayers()" style="width:100%; margin-top:10px; padding:12px; background:linear-gradient(135deg,#7B241C,#C0392B); color:white; border:none; border-radius:12px; font-family:'Tajawal',sans-serif; font-size:0.9rem; font-weight:700; cursor:pointer;">
-          🗑️ مسح الكل ورجّع من الأول
-        </button>
-      </div>
-    </div>
-
-    <div class="tab-row" style="margin-top:16px;">
+    <div class="tab-row">
       <button class="tab-btn" onclick="showScreen('screen-welcome')">🏠 الرئيسية</button>
       <button class="tab-btn" onclick="loadLeaderboard()">🔄 تحديث</button>
     </div>
@@ -862,6 +848,11 @@ async function startQuiz() {
 
   const isAdmin = name === ADMIN_NAME;
 
+  if(isAdmin){
+    <button onclick="clearMyStorage()">🔄 إعادة تعيين جهازي</button>
+
+  }
+
   // فحص localStorage أولاً (فوري - بدون انتظار)
   if (!isAdmin) {
     try {
@@ -1066,60 +1057,6 @@ async function loadLeaderboard() {
     </table>
     ${!useDB ? '<p style="text-align:center;margin-top:16px;font-size:0.8rem;color:rgba(212,175,55,0.5);">⚠️ وضع المعاينة - بيانات محلية</p>' : ''}
   `;
-
-  // أدوات الأدمن — تظهر بس لو أدمن
-  const adminSection = document.getElementById('adminToolsSection');
-  const adminList = document.getElementById('adminPlayersList');
-  if (userName === ADMIN_NAME) {
-    adminSection.style.display = 'block';
-    adminList.innerHTML = results.map(r => `
-      <div style="display:flex; align-items:center; justify-content:space-between; padding:8px 10px; margin-bottom:6px; background:rgba(255,255,255,0.04); border:1px solid rgba(212,175,55,0.15); border-radius:10px;">
-        <div>
-          <span style="font-size:0.9rem; color:var(--text-light);">${escHtml(r.name)}</span>
-          <span style="font-size:0.75rem; color:var(--gold); margin-right:8px;">${r.score}/${r.total}</span>
-        </div>
-        <button onclick="deletePlayer(${r.id}, '${escHtml(r.name).replace(/'/g,"\\'")}', this)"
-          style="padding:5px 10px; background:rgba(192,57,43,0.3); border:1px solid rgba(231,76,60,0.4); color:#E74C3C; border-radius:8px; font-family:'Tajawal',sans-serif; font-size:0.78rem; cursor:pointer;">
-          🗑️ حذف
-        </button>
-      </div>
-    `).join('');
-  } else {
-    adminSection.style.display = 'none';
-  }
-}
-
-// ===== أدوات الأدمن =====
-async function deletePlayer(id, name, btnEl) {
-  if (!confirm(`تأكيد حذف "${name}" وتسمحله يلعب تاني؟`)) return;
-  btnEl.textContent = '⏳';
-  btnEl.disabled = true;
-  try {
-    if (useDB) {
-      const { error } = await sbClient.from('quiz_results').delete().eq('id', id);
-      if (error) throw error;
-    }
-    // رفرش الليست
-    await loadLeaderboard();
-  } catch(e) {
-    btnEl.textContent = '❌ فشل';
-    console.log('Delete error:', e);
-  }
-}
-
-async function clearAllPlayers() {
-  if (!confirm('مسح كل النتائج؟ مش هيرجع! 🚨')) return;
-  try {
-    if (useDB) {
-      // حذف كل الصفوف
-      const { error } = await sbClient.from('quiz_results').delete().neq('id', -1);
-      if (error) throw error;
-    }
-    await loadLeaderboard();
-    alert('✅ تم مسح كل النتائج');
-  } catch(e) {
-    alert('❌ فيه مشكلة: ' + e.message);
-  }
 }
 
 function formatDate(d) {
@@ -1149,6 +1086,11 @@ document.getElementById('nameInput').addEventListener('input', function() {
   document.getElementById('leaderboardBtnRow').style.display = isAdmin ? 'flex' : 'none';
   if (isAdmin) userName = val;
 });
+
+function clearMyStorage() {
+  localStorage.removeItem('family_quiz_played_2025');
+  alert('تم! تقدر تلعب تاني');
+}
 
 // ===== فحص أول ما الصفحة تفتح =====
 function checkAlreadyPlayedOnLoad() {
