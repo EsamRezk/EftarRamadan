@@ -889,36 +889,14 @@ async function showResult() {
 ];
 
   let selectedMsg = 'يسعدنا دعوتك لإفطار العائلة';
-  for (let msg of messages) {
-    if (score >= msg.range[0] && score <= msg.range[1]) {
-      selectedMsg = msg.texts[Math.floor(Math.random() * msg.texts.length)];
-      break;
-    }
-  }
+
 
   document.getElementById('resultTitle').textContent = titles[score];
   document.getElementById('scoreBig').textContent = `${score} / ${questions.length}`;
   document.getElementById('invName').textContent = `أهلاً بك يا ${userName} 🌙`;
   
   const invBody = document.querySelector('.invitation-body');
-  if (invBody) {
-    invBody.innerHTML = `${selectedMsg}
-        <div class="invitation-detail">
-          <span class="icon">📅</span>
-          <span class="detail-label">التاريخ:</span>
-          <span class="detail-val">الاثنين ٢٣ فبراير</span>
-        </div>
-        <div class="invitation-detail">
-          <span class="icon">🕌</span>
-          <span class="detail-label">المكان:</span>
-          <span class="detail-val"><a href="https://maps.app.goo.gl/2eExAc16hfzRPNFq6" target="_blank" style="color:var(--gold-light); text-decoration:underline; font-weight:700;">فندق ALMA 📍</a></span>
-        </div>
-        <div class="invitation-detail">
-          <span class="icon">🌙</span>
-          <span class="detail-label">المناسبة:</span>
-          <span class="detail-val">إفطار رمضان المبارك</span>
-        </div>`;
-  }
+
 
   showScreen('screen-result');
 
