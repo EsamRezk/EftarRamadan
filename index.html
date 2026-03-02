@@ -346,63 +346,70 @@ h1 {
   font-size: 0.85rem;
 }
 
-/* Invitation screen */
-.invitation-card {
-  background: linear-gradient(145deg, rgba(212,175,55,0.1), rgba(212,175,55,0.03));
-  border: 1px solid rgba(212, 175, 55, 0.5);
-  border-radius: 20px;
-  padding: 28px 20px;
+/* Result screen - بسيط ونظيف */
+.result-welcome {
+  font-family: 'Amiri', serif;
+  font-size: 1.9rem;
+  color: var(--gold);
   text-align: center;
-  margin: 16px 0;
-  position: relative;
-  overflow: hidden;
-}
-
-.invitation-card::before {
-  content: '✦';
-  position: absolute;
-  top: 10px; right: 14px;
-  color: var(--gold);
-  opacity: 0.4;
-  font-size: 1.3rem;
-}
-
-.invitation-card::after {
-  content: '✦';
-  position: absolute;
-  bottom: 10px; left: 14px;
-  color: var(--gold);
-  opacity: 0.4;
-  font-size: 1.3rem;
-}
-
-.invitation-name {
-  font-family: 'Amiri', serif;
-  font-size: 1.6rem;
-  color: var(--gold);
   margin-bottom: 6px;
+  text-shadow: 0 0 30px rgba(212, 175, 55, 0.4);
 }
 
-.invitation-body {
-  font-family: 'Amiri', serif;
+.score-display {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.score-number {
+  font-size: 4.5rem;
+  font-weight: 900;
+  color: var(--gold);
+  line-height: 1;
+  display: block;
+  text-shadow: 0 0 40px rgba(212, 175, 55, 0.5);
+}
+
+.score-label {
   font-size: 1rem;
+  color: rgba(240, 230, 200, 0.5);
+  margin-top: 6px;
+  display: block;
+}
+
+.score-stars {
+  font-size: 1.8rem;
+  margin-top: 8px;
+  display: block;
+  letter-spacing: 4px;
+}
+
+.funny-msg-box {
+  background: rgba(212, 175, 55, 0.07);
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  border-radius: 16px;
+  padding: 20px 22px;
+  margin: 20px 0 10px;
+  text-align: center;
+  position: relative;
+}
+
+.funny-msg-box::before {
+  content: '😂';
+  position: absolute;
+  top: -16px;
+  right: 50%;
+  transform: translateX(50%);
+  font-size: 1.8rem;
+  filter: drop-shadow(0 0 8px rgba(212,175,55,0.3));
+}
+
+.funny-msg-text {
+  font-family: 'Amiri', serif;
+  font-size: 1.1rem;
   line-height: 1.8;
   color: var(--cream);
 }
-
-.invitation-detail {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  margin: 8px 0;
-  font-size: 0.95rem;
-  flex-wrap: wrap;
-}
-
-.invitation-detail .icon { font-size: 1.1rem; }
-.invitation-detail .detail-label { color: var(--gold-light); font-weight: 700; }
-.invitation-detail .detail-val { color: var(--cream); }
 
 /* Leaderboard */
 .leaderboard-table {
@@ -435,7 +442,6 @@ h1 {
 .leaderboard-table td:nth-child(1) { text-align: center; }
 .leaderboard-table td:nth-child(3) { text-align: center; }
 
-/* النجوم تتكسر في سطرين بدل ما تطلع بره */
 .stars-cell {
   display: block;
   font-size: 0.75rem;
@@ -554,7 +560,7 @@ h1 {
   <!-- SCREEN 2: Question -->
   <div class="screen" id="screen-question">
     <div class="question-header">
-      <div class="q-badge" id="qBadge">السؤال 1 من 10</div>
+      <div class="q-badge" id="qBadge">السؤال 1 من 15</div>
       <div class="progress-dots">
         <div class="dot active" id="dot-0"></div>
         <div class="dot" id="dot-1"></div>
@@ -580,35 +586,19 @@ h1 {
     <div class="score-circles" id="scoreCircles"></div>
   </div>
 
-  <!-- SCREEN 3: Result + Invitation -->
+  <!-- SCREEN 3: Result - الترحيب + السكور + الرسالة الفكاهية فقط -->
   <div class="screen" id="screen-result">
-    <span class="icon-moon">🎉</span>
-    <h1 id="resultTitle">أحسنت!</h1>
+    <div class="result-welcome" id="invName">أهلاً 🌙</div>
     <div class="gold-divider"></div>
 
-    <div id="scoreBig" style="text-align:center; font-size:3rem; color:var(--gold); margin:10px 0;"></div>
-    <p style="text-align:center; color:rgba(240,230,200,0.6); font-size:0.9rem;">من ١٠ أسئلة</p>
+    <div class="score-display">
+      <span class="score-number" id="scoreBig"></span>
+      <span class="score-label">من <span id="totalQs">15</span> سؤال</span>
+      <span class="score-stars" id="scoreStars"></span>
+    </div>
 
-    <div class="invitation-card">
-      <div class="invitation-name" id="invName"></div>
-      <div class="invitation-body">
-        يسعدنا دعوتك لإفطار العائلة
-        <div class="invitation-detail">
-          <span class="icon">📅</span>
-          <span class="detail-label">التاريخ:</span>
-          <span class="detail-val">الاثنين ٢٣ فبراير</span>
-        </div>
-        <div class="invitation-detail">
-          <span class="icon">🕌</span>
-          <span class="detail-label">المكان:</span>
-          <span class="detail-val"><a href="https://maps.app.goo.gl/2eExAc16hfzRPNFq6" target="_blank" style="color:var(--gold-light); text-decoration:underline; font-weight:700;">فندق ALMA 📍</a></span>
-        </div>
-        <div class="invitation-detail">
-          <span class="icon">🌙</span>
-          <span class="detail-label">المناسبة:</span>
-          <span class="detail-val">إفطار رمضان المبارك</span>
-        </div>
-      </div>
+    <div class="funny-msg-box">
+      <p class="funny-msg-text" id="funnyMsg"></p>
     </div>
 
     <div class="tab-row" id="adminLeaderboardRow" style="display:none;">
@@ -650,6 +640,7 @@ let score = 0;
 let userName = '';
 let answers = [];
 let answered = false;
+
 const questions = [
   {
     q: "ما السورة التي سُمّيت باسم أحد أركان الإسلام؟",
@@ -664,7 +655,7 @@ const questions = [
     explanation: "ذُكر اسم مريم عليها السلام 34 مرة في القرآن الكريم"
   },
   {
-    q: "من هو الصحابي الذي لُقِّب بسيف الله المسلول؟",
+    q: "من هو الصحابي الذي لُقِّب بسيف الله المسلول؟",
     options: ["الزبير بن العوام", "خالد بن الوليد", "علي بن أبي طالب", "سعد بن أبي وقاص"],
     correct: 1,
     explanation: "لقّبه النبي ﷺ بسيف الله المسلول بعد غزوة مؤتة"
@@ -743,6 +734,64 @@ const questions = [
   }
 ];
 
+// الرسائل الفكاهية حسب النتيجة
+const funnyMessages = [
+  // 0-3
+  {
+    range: [0, 3],
+    msgs: [
+      'إنت دخلت تحمّي بس ولا إيه؟ 😅 ركّز شوية وهتشوف الفرق!',
+      'واضح إنك جاوبت وانت مستعجل على الشاي 😂 جرب تاني وأديها تركيز أكتر!',
+      'الأسئلة اشتكت منك يا صديقي 😬 بس عادي، المهم الحضور!'
+    ]
+  },
+  // 4-6
+  {
+    range: [4, 6],
+    msgs: [
+      'أداء معقول 👌 بس لسه في حتة كده ناقصة تزبيط بسيط.',
+      'ماشي الحال 😄 انت في السليم... بس لو ركزت سنة صغيرة هتعلى جامد!',
+      'نص الكوباية ملياني 🙂 يعني مش خسران بس مش رابح خالص!'
+    ]
+  },
+  // 7-9
+  {
+    range: [7, 9],
+    msgs: [
+      'جامد جدًا 👏 واضح إنك فاهم اللعبة صح!',
+      'شغل عالي 👌 كده الناس هتبدأ تسألك إنت ذاكرت فين!',
+      'أقل شوية من المثالية... بس أكتر بكتير من المتوسط 😎'
+    ]
+  },
+  // 10-15
+  {
+    range: [10, 15],
+    msgs: [
+      'الله عليك 👑 ده إنت حافظ المنهج من الجلدة للجلدة!',
+      'فوق الممتاز 🔥 كده احنا نخاف منك في المسابقات الجاية!',
+      'ما شاء الله! 🌟 الأسئلة نفسها اتفاجأت منك!'
+    ]
+  }
+];
+
+function getFunnyMsg(s) {
+  for (const group of funnyMessages) {
+    if (s >= group.range[0] && s <= group.range[1]) {
+      const list = group.msgs;
+      return list[Math.floor(Math.random() * list.length)];
+    }
+  }
+  return 'رمضان كريم! 🌙';
+}
+
+function getStars(s, total) {
+  const pct = s / total;
+  if (pct === 1) return '⭐⭐⭐⭐⭐';
+  if (pct >= 0.8) return '⭐⭐⭐⭐';
+  if (pct >= 0.6) return '⭐⭐⭐';
+  if (pct >= 0.4) return '⭐⭐';
+  return '⭐';
+}
 
 function generateStars() {
   const container = document.getElementById('stars');
@@ -867,36 +916,18 @@ function selectAnswer(idx, btnEl) {
 }
 
 async function showResult() {
-  const titles = ['حاول مرة أخرى! 💪', 'مش بطال! 👍', 'كويس! 😊', 'ممتاز! أحسنت 👏', 'رائع جداً! 🌟', 'رائع جداً! 🌟', 'رائع جداً! 🌟', 'مثالي تقريباً! 💫', 'مثالي تقريباً! 💫', 'مثالي تقريباً! 💫', 'مثالي! ما شاء الله! 🏆'];
-  
-  const messages = [
-  { range: [0, 3], texts: [
-    'إنت دخلت تحمّي بس ولا إيه؟ 😅 ركّز شوية وهتشوف الفرق!',
-    'واضح إنك جاوبت وانت مستعجل على الشاي 😂 جرب تاني واديها تركيز أكتر!'
-  ]},
-  { range: [4, 6], texts: [
-    'أداء معقول 👌 بس لسه في حتة كدا ناقصة تزبيط بسيط.',
-    'ماشي الحال 😄 انت في السليم… بس لو ركزت سنة صغيرة هتعلى جامد!'
-  ]},
-  { range: [7, 9], texts: [
-    'جامد جدًا 👏 واضح إنك فاهم اللعبة صح!',
-    'شغل عالي 👌 كده الناس هتبدأ تسألك إنت ذاكرت فين!'
-  ]},
-  { range: [10, 15], texts: [
-    'الله عليك 👑 ده إنت حافظ المنهج من الجلدة للجلدة!',
-    'فوق الممتاز 🔥 كده احنا نخاف منك في المسابقات الجاية!'
-  ]}
-];
-
-  let selectedMsg = 'يسعدنا دعوتك لإفطار العائلة';
-
-
-  document.getElementById('resultTitle').textContent = titles[score];
-  document.getElementById('scoreBig').textContent = `${score} / ${questions.length}`;
+  // الترحيب بالاسم
   document.getElementById('invName').textContent = `أهلاً بك يا ${userName} 🌙`;
-  
-  const invBody = document.querySelector('.invitation-body');
 
+  // السكور
+  document.getElementById('scoreBig').textContent = `${score} / ${questions.length}`;
+  document.getElementById('totalQs').textContent = questions.length;
+
+  // النجوم
+  document.getElementById('scoreStars').textContent = getStars(score, questions.length);
+
+  // الرسالة الفكاهية
+  document.getElementById('funnyMsg').textContent = getFunnyMsg(score);
 
   showScreen('screen-result');
 
@@ -906,6 +937,7 @@ async function showResult() {
 
   if (score === questions.length) launchConfetti();
 
+  // حفظ النتيجة
   if (useDB) {
     try {
       await sbClient.from('quiz_results').insert({
@@ -953,7 +985,6 @@ async function loadLeaderboard() {
   const medals = ['🥇','🥈','🥉'];
   const rankClass = i => i===0?'rank-1':i===1?'rank-2':i===2?'rank-3':'rank-other';
 
-  // حساب عدد النجوم بشكل يناسب الموبايل
   const starsHtml = (n) => {
     if (n <= 5) return '⭐'.repeat(n);
     return '⭐'.repeat(5) + '<br>' + '⭐'.repeat(n - 5);
@@ -977,7 +1008,7 @@ async function loadLeaderboard() {
               <div style="font-size:0.72rem;opacity:0.5;margin-top:2px;">🕐 ${formatDate(r.created_at)}</div>
             </td>
             <td>
-              <span class="score-text" style="color:${r.score===10?'var(--gold)':r.score>=7?'#2ECC71':'rgba(240,230,200,0.7)'};">${r.score} / ${r.total}</span>
+              <span class="score-text" style="color:${r.score>=13?'var(--gold)':r.score>=10?'#2ECC71':'rgba(240,230,200,0.7)'};">${r.score} / ${r.total}</span>
               <span class="stars-cell">${starsHtml(r.score)}</span>
             </td>
           </tr>
